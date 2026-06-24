@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conclusions — Amsterdam 30 km/h</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: #ECEAE4;
+    color: #1a1a1a;
+    min-height: 100vh;
+    font-size: 15px;
+  }
+
+  /* HERO */
+  .hero {
+    text-align: center;
+    padding: 72px 32px 40px;
+  }
+  .hero h1 {
+    font-size: 56px;
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    color: #111;
+    margin-bottom: 14px;
+    line-height: 1.1;
+  }
+  .hero p {
+    font-size: 16px;
+    color: #555;
+    max-width: 580px;
+    margin: 0 auto 28px;
+    line-height: 1.6;
+  }
+  .arrow-down {
+    font-size: 20px;
+    color: #888;
+    display: block;
+    animation: bounce 1.8s ease-in-out infinite;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(7px); }
+  }
+
+  /* KPI GRID */
+  .kpi-grid {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 0 32px 48px;
+    flex-wrap: wrap;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .kpi-card {
+    background: #F2F0EB;
+    border: 0.5px solid #d8d5ce;
+    border-radius: 16px;
+    padding: 22px 16px 18px;
+    width: 155px;
+    text-align: center;
+    transition: background 0.15s;
+  }
+  .kpi-card:hover { background: #eae7e0; }
+  .kpi-card.active { background: #e6e3dc; border-color: #c0bdb6; }
+
+  .kpi-icon-wrap {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+    font-size: 18px;
+  }
+  .kpi-icon-wrap.green { background: #d4ede2; }
+  .kpi-icon-wrap.gray  { background: #e0ddd7; }
+  .kpi-icon-wrap.red   { background: #fde8e6; }
+  .kpi-icon-wrap.blue  { background: #dce8f7; }
+  .kpi-icon-wrap.purple{ background: #ece6f7; }
+
+  .kpi-trend {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    line-height: 1;
+  }
+  .kpi-trend.down   { color: #2d7a52; }
+  .kpi-trend.neutral{ color: #888; }
+  .kpi-trend.up     { color: #c0392b; }
+  .kpi-trend.approx { color: #888; }
+
+  .kpi-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #111;
+    margin-bottom: 4px;
+  }
+  .kpi-sub {
+    font-size: 12px;
+    color: #777;
+    line-height: 1.4;
+  }
+
+  /* MAIN BODY */
+  .body-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 32px 80px;
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 24px;
+    align-items: start;
+  }
+
+  /* LEFT COL */
+  .left-col {}
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .section-header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #111;
+  }
+  .section-header-left svg { opacity: 0.5; }
+  .collapse-all {
+    font-size: 13px;
+    color: #777;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: inherit;
+  }
+  .collapse-all:hover { color: #333; }
+
+  .finding-card {
+    background: white;
+    border-radius: 16px;
+    border: 0.5px solid #d8d5ce;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  .finding-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 18px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .finding-header:hover { background: #fafaf8; }
+  .finding-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #111;
+  }
+  .finding-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    flex-shrink: 0;
+  }
+  .finding-icon.air      { background: #e0f2ea; }
+  .finding-icon.noise    { background: #fde8e6; }
+  .finding-icon.live     { background: #e8edf8; }
+  .finding-icon.opinion  { background: #f2edf8; }
+  .finding-icon.traffic  { background: #e6f0fa; }
+
+  .finding-count {
+    background: #f0ede8;
+    color: #888;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 7px;
+    padding: 3px 9px;
+  }
+  .finding-body {
+    border-top: 0.5px solid #eae7e1;
+    padding: 16px 18px 18px 18px;
+  }
+  .finding-body ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .finding-body li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: #333;
+    line-height: 1.55;
+  }
+  .bullet {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #2d7a52;
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+  .bullet.red    { background: #c0392b; }
+  .bullet.gray   { background: #aaa; }
+  .bullet.blue   { background: #2471a3; }
+  .bullet.purple { background: #7d3c98; }
+  .bullet.orange { background: #d4810a; }
+
+  /* RIGHT COL */
+  .right-col {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    position: sticky;
+    top: 24px;
+  }
+
+  .rq-card {
+    background: #E0DDD7;
+    border-radius: 16px;
+    padding: 20px 22px;
+  }
+  .rq-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #555;
+    margin-bottom: 12px;
+  }
+  .rq-label-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1.5px solid #999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #666;
+  }
+  .rq-text {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.7;
+  }
+
+  .sq-card {
+    background: #E0DDD7;
+    border-radius: 16px;
+    padding: 20px 22px;
+  }
+  .sq-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #555;
+    margin-bottom: 14px;
+  }
+  .sq-label-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1.5px solid #999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #666;
+  }
+  .sq-item {
+    background: white;
+    border-radius: 10px;
+    border: 0.5px solid #d0cdc7;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .sq-item:last-child { margin-bottom: 0; }
+  .sq-item:hover { background: #f7f5f2; }
+  .sq-num {
+    background: #e8e5df;
+    color: #777;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 6px;
+    padding: 2px 7px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    letter-spacing: 0.02em;
+  }
+  .sq-text-wrap { flex: 1; }
+  .sq-preview {
+    font-size: 13px;
+    color: #444;
+    line-height: 1.5;
+  }
+  .sq-full {
+    font-size: 13px;
+    color: #333;
+    line-height: 1.6;
+    margin-top: 8px;
+    display: none;
+    border-top: 0.5px solid #e0ddd7;
+    padding-top: 8px;
+  }
+  .sq-chevron {
+    color: #aaa;
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    transition: transform 0.2s;
+  }
+  .sq-item.open .sq-chevron { transform: rotate(180deg); }
+  .sq-item.open .sq-full { display: block; }
+
+  @media (max-width: 860px) {
+    .body-wrap { grid-template-columns: 1fr; }
+    .right-col { position: static; }
+    .hero h1 { font-size: 40px; }
+    .kpi-card { width: 140px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Conclusions</h1>
+  <p>Impact of Amsterdam's 30 km/h speed limit on air quality, traffic noise, and resident perceptions</p>
+  <span class="arrow-down">↓</span>
+</div>
+
+<!-- KPI CARDS -->
+<div class="kpi-grid">
+  <div class="kpi-card">
+    <div class="kpi-icon-wrap green">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2d7a52" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+    </div>
+    <div class="kpi-trend down">↓</div>
+    <div class="kpi-label">PM2.5</div>
+    <div class="kpi-sub">Lower in 2024 vs 2023</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-icon-wrap gray">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    </div>
+    <div class="kpi-trend neutral">—</div>
+    <div class="kpi-label">PM10</div>
+    <div class="kpi-sub">No significant change</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-icon-wrap gray">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    </div>
+    <div class="kpi-trend neutral">—</div>
+    <div class="kpi-label">NO₂</div>
+    <div class="kpi-sub">No change observed</div>
+  </div>
+  <div class="kpi-card active">
+    <div class="kpi-icon-wrap red">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+    </div>
+    <div class="kpi-trend up">↑</div>
+    <div class="kpi-label">Traffic Noise</div>
+    <div class="kpi-sub">Higher at 30 km/h zones</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-icon-wrap green">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2d7a52" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+    </div>
+    <div class="kpi-trend down">↓</div>
+    <div class="kpi-label">Traffic Volume</div>
+    <div class="kpi-sub">Less traffic in 2024</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-icon-wrap purple">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7d3c98" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+    </div>
+    <div class="kpi-trend approx">~</div>
+    <div class="kpi-label">Livability</div>
+    <div class="kpi-sub">Mixed opinions</div>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="body-wrap">
+  <div class="left-col">
+    <div class="section-header">
+      <div class="section-header-left">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+        Final Conclusions
+      </div>
+      <button class="collapse-all" onclick="toggleAll()">Collapse all</button>
+    </div>
+
+    <!-- Air Quality -->
+    <div class="finding-card">
+      <div class="finding-header" onclick="toggle(this)">
+        <div class="finding-header-left">
+          <div class="finding-icon air">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2d7a52" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/></svg>
+          </div>
+          Air Quality — PM2.5 &amp; PM10
+        </div>
+        <span class="finding-count">3</span>
+      </div>
+      <div class="finding-body">
+        <ul>
+          <li><span class="bullet"></span>Higher PM2.5 values in 2023 in comparison to 2024</li>
+          <li><span class="bullet"></span>Little to no change in PM10 values between 2023 and 2024</li>
+          <li><span class="bullet"></span>No change in nitrogen dioxide values after determining the speed limit from 50 km/h to 30 km/h for both Noord-West and Oud-Oost</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Traffic Noise -->
+    <div class="finding-card">
+      <div class="finding-header" onclick="toggle(this)">
+        <div class="finding-header-left">
+          <div class="finding-icon noise">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+          </div>
+          Traffic Noise
+        </div>
+        <span class="finding-count">2</span>
+      </div>
+      <div class="finding-body">
+        <ul>
+          <li><span class="bullet red"></span>Higher values of traffic noise in Noord-West Amsterdam with a speed limit of 30 km/h in comparison to 50 km/h</li>
+          <li><span class="bullet green" style="background:#2d7a52"></span>Slightly lower values of traffic noise in Oud-Oost Amsterdam with a speed limit of 30 km/h in comparison to 50 km/h</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Livability -->
+    <div class="finding-card">
+      <div class="finding-header" onclick="toggle(this)">
+        <div class="finding-header-left">
+          <div class="finding-icon live">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2471a3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          Livability
+        </div>
+        <span class="finding-count">1</span>
+      </div>
+      <div class="finding-body">
+        <ul>
+          <li><span class="bullet blue"></span>Livability towards the centre of Amsterdam is marginally worse in comparison to the outside parts of the city</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Public Opinion -->
+    <div class="finding-card">
+      <div class="finding-header" onclick="toggle(this)">
+        <div class="finding-header-left">
+          <div class="finding-icon opinion">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7d3c98" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          Public Opinion
+        </div>
+        <span class="finding-count">3</span>
+      </div>
+      <div class="finding-body">
+        <ul>
+          <li><span class="bullet gray"></span>In general mixed opinions of citizens about the implementation of the 30 km/h zones at the end of 2023</li>
+          <li><span class="bullet" style="background:#2d7a52"></span>Positive opinions are mainly about people driving more calm and safe</li>
+          <li><span class="bullet red"></span>Negative opinions mainly address that more traffic jams will form due to lower speeds making people drive more aggressively</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Traffic Data GGD -->
+    <div class="finding-card">
+      <div class="finding-header" onclick="toggle(this)">
+        <div class="finding-header-left">
+          <div class="finding-icon traffic">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2471a3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          </div>
+          Traffic Data (GGD)
+        </div>
+        <span class="finding-count">1</span>
+      </div>
+      <div class="finding-body">
+        <ul>
+          <li><span class="bullet blue"></span>GGD measurements show less traffic in 2024 in comparison to 2023</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT COL -->
+  <div class="right-col">
+    <div class="rq-card">
+      <div class="rq-label">
+        <div class="rq-label-icon">⊙</div>
+        Main research question
+      </div>
+      <div class="rq-text">To what extent does the reduction of the speed limit from 50 to 30 km/h correlate with changes in PM2.5 and PM10 concentrations, and how do these findings align with the perceptions and experiences of residents both before and after the policy change, and between an area where 30 km/h has been implemented (Oud-Oost) and an area where 50 km/h remains the norm (Noord-West)?</div>
+    </div>
+
+    <div class="sq-card">
+      <div class="sq-label">
+        <div class="sq-label-icon">⊙</div>
+        Sub-questions
+      </div>
+
+      <div class="sq-item" onclick="toggleSQ(this)">
+        <span class="sq-num">SQ1</span>
+        <div class="sq-text-wrap">
+          <div class="sq-preview">What differences in PM2.5 and PM10 concentrations are observable between Oud-Oost...</div>
+          <div class="sq-full">What differences in PM2.5 and PM10 concentrations are observable between Oud-Oost and Noord-West Amsterdam, and how have these changed over time relative to the introduction of the 30 km/h zones?</div>
+        </div>
+        <span class="sq-chevron">▾</span>
+      </div>
+
+      <div class="sq-item" onclick="toggleSQ(this)">
+        <span class="sq-num">SQ2</span>
+        <div class="sq-text-wrap">
+          <div class="sq-preview">How do residents of Oud-Oost and Noord-West Amsterdam perceive changes in air quality and...</div>
+          <div class="sq-full">How do residents of Oud-Oost and Noord-West Amsterdam perceive changes in air quality and traffic safety since the introduction of the 30 km/h policy, and do these perceptions differ between the two areas?</div>
+        </div>
+        <span class="sq-chevron">▾</span>
+      </div>
+
+      <div class="sq-item" onclick="toggleSQ(this)">
+        <span class="sq-num">SQ3</span>
+        <div class="sq-text-wrap">
+          <div class="sq-preview">To what extent do the sensor measurements from Samenmeten align with the perceptions and...</div>
+          <div class="sq-full">To what extent do the sensor measurements from Samenmeten align with the perceptions and experiences reported by residents through the Maptionnaire survey?</div>
+        </div>
+        <span class="sq-chevron">▾</span>
+      </div>
+
+      <div class="sq-item" onclick="toggleSQ(this)">
+        <span class="sq-num">SQ4</span>
+        <div class="sq-text-wrap">
+          <div class="sq-preview">How can the results of this comparison be clearly and accessibly visualised for RIVM and their...</div>
+          <div class="sq-full">How can the results of this comparison be clearly and accessibly visualised for RIVM and their connections?</div>
+        </div>
+        <span class="sq-chevron">▾</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function toggle(header) {
+    const body = header.nextElementSibling;
+    const isOpen = body.style.display !== 'none';
+    body.style.display = isOpen ? 'none' : 'block';
+  }
+
+  function toggleAll() {
+    const bodies = document.querySelectorAll('.finding-body');
+    const btn = document.querySelector('.collapse-all');
+    const anyOpen = Array.from(bodies).some(b => b.style.display !== 'none');
+    bodies.forEach(b => b.style.display = anyOpen ? 'none' : 'block');
+    btn.textContent = anyOpen ? 'Expand all' : 'Collapse all';
+  }
+
+  function toggleSQ(item) {
+    item.classList.toggle('open');
+  }
+</script>
+</body>
+</html>
